@@ -1,0 +1,41 @@
+## 基于 TOTP 的 MFA 实验
+实验步骤：
+
+1\. 启动项目
+
+2\. `POST` 访问 `http://localhost:8080/mfa/login` 可以访问
+```json
+{
+    "username":"zhangsan",
+    "password":"zhangsan123"
+}
+```
+3\. `PUT` 访问 `http://localhost:8080/mfa/generate` 申请新的 TOTP 令牌
+```json
+{
+    "qrImage": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAACsElEQVR42u3dQW7DIBAFUN//0u0BskkEf2bA70vdRG1qw5MMA7afP3l1Hk0AgAAgAAgAAoAAIAAIAAKAACAACAACwOcfPs/2n1+//5tj++bzlfOd1m4AAAAAAMUAlg7gxw5NAOsCkG43AAAAAIBiALs64tfv3/WdiXPp+l8AAAAAAIcCWBkDrFzH01NOAAAAAAAAtlw302OPrnEIAAAAAMChANKQKquLiSgFAwAAAJcBqFysuelzG0IAAACAQwFUJl1RTIw90mOJbW0LAAAAAJCZviU6d9o2sMrp6nGlYAAAAACA3N9OWHjadWyJzgUAAAAAGFIJHHGy4fsN09W/oxeDAAAAgJsAJKp2lbeBJ+CldywDAAAAAFxcCVxpzPRTR3Y1frrdAAAAAAAGTgO7brjomtatHPOr9gQCAAAApwNITBXTVcf08wlfOw0EAAAAFIJy1690Q3Xd8JKolAIAAAAAFC8G7ZrWTVjcqZwapzsaAAAAACAEIH0tTmCrHD90dS4AAAAAwHAAXbuC0+OZCdNJAAAAAIAhlcCu6lx6TFL5wgsAAAAAgIEAurZRVT5RZMLLLyI3swAAAAAA9C2U7AJWOQ5JTBvTxw8AAAAAUDAGSEzlKm8GSY8BEkgAAAAAAIaMARK7f3f9zgSoEzodAAAAAKB4DLDrupzo3MqpXNe7gQAAAAAAGiuBp08zJzx46ujFIAAAAOAmANNuo+7qoGmfAwAAAAAUA9h1rV9p/AkvsKh86ygAAAAAwKEPidp1rU9vM+uq/qWrrwAAAAAABwFIX3NXzqtysQkAAAAA4CUAutbZu24q6XrAFAAAAADAoZXAxHEmtmlN2P0LAAAAABACULkf4JQ3fk54GgkAAAAAQAiA3BEAABAABAABQAAQAAQAAUAAEAAEAAFAAJBb8w/5IMrqgTxUJgAAAABJRU5ErkJggg==",
+    "optAuthUrl": "otpauth://totp/张三?secret=RBZFNMJDAQRTKV63JUBOVN2IDVOPCHG7",
+    "mfaKey": "RBZFNMJDAQRTKV63JUBOVN2IDVOPCHG7",
+    "mfaType": "TFA_TOTP"
+}
+```
+4\. 在手机上扫描该 QR
+
+5\. `POST` 访问 `http://localhost:8080/mfa/update`
+```json
+{
+"mfaType": "TFA_TOTP",  
+"mfaKey": "RBZFNMJDAQRTKV63JUBOVN2IDVOPCHG7",
+"authcode":"985756"
+}
+```
+6\. 重复步骤2发现无法登录成功
+7\. 需要添加 `authcode` 才可登录
+```json
+{
+    "username":"zhangsan",
+    "password":"zhangsan123",
+    "authcode":"246092"
+}
+```
+
